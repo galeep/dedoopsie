@@ -1,6 +1,6 @@
 # Dedupe Safe Move
 
-This is a sane, test-backed utility for identifying and moving duplicate files within a directory tree. It favors safety, transparency, and auditability over blind automation.
+This is a cautious, test-backed utility for identifying and moving duplicate files within a directory tree. It favors safety, transparency, and auditability over blind automation.
 
 ### Features
 
@@ -10,6 +10,7 @@ This is a sane, test-backed utility for identifying and moving duplicate files w
 - Structured logs with group IDs, reclaimable size, keeper strategy, and hashes
 - CLI flags to discourage accidental file destruction
 - Can be imported as a module or run from the command line
+- No file deletion, only safe moves or logged intents
 
 ---
 
@@ -73,11 +74,11 @@ for group in dupe_groups:
 
 This tool assumes:
 
-- You're operating on a real system, not a toy dataset
+- You're operating on a real system
 - You care more about not breaking things than shaving microseconds
 - Logging, reversibility, and testability matter
 
-If that sounds like your vibe, you're in the right place.
+If your priorities differ, there are better and more efficient utilities for deduplication. This exists to help humans avoid stepping on rakes.
 
 ---
 
@@ -95,7 +96,7 @@ Dry run, safe move, collision handling, and keeper strategies are all covered.
 
 ## License
 
-MIT. Use it, tweak it, improve it. Just don’t write a YOLO deduper and blame us.
+BSD 2-Clause
 
 ---
 
@@ -103,6 +104,8 @@ MIT. Use it, tweak it, improve it. Just don’t write a YOLO deduper and blame u
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![No Deletion](https://img.shields.io/badge/deletes-nothing)
+
 
 ---
 
