@@ -3,4 +3,4 @@
 Pull requests welcome.
 
 Please prioritize clarity, safety, and reversibility.
-Write tests. Respect the philosophy.
+Write tests, and respect the philosophy of this module.

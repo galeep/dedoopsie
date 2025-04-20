@@ -2,7 +2,7 @@ import os
 import tempfile
 import csv
 from pathlib import Path
-from dedoopsie import core
+from dedoopsie.dedoopsie import core
 
 
 def create_test_group_with_metadata(base_dir):
