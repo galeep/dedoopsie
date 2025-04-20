@@ -49,7 +49,7 @@ def run_dedupe(dedupe_script, src_dir, move_dir, wet=False):
 
 
 def read_log(log_path):
-    """Parse CSV log output from dedupe run."""
+    """Parse CSV log output from dedoopsie run."""
     with open(log_path) as f:
         reader = csv.DictReader(f)
         return list(reader)

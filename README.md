@@ -19,13 +19,13 @@ This is a cautious, test-backed utility for identifying and moving duplicate fil
 ### Dry run (recommended first step)
 
 ```bash
-python -m dedupe.cli /path/to/scan
+python -m dedoopsie.cli /path/to/scan
 ```
 
 ### Wet mode (actual file moves)
 
 ```bash
-DUDE_ARE_YOU_SURE=YES python -m dedupe.cli /path/to/scan \
+DUDE_ARE_YOU_SURE=YES python -m dedoopsie.cli /path/to/scan \
   --wet --yes-really \
   --move-dir /some/target/path \
   --keeper longest
@@ -56,7 +56,7 @@ Use it to debug, review, or rollback if needed. You'll thank yourself later.
 ## Python Usage
 
 ```python
-from dedupe.core import scan_directory, find_duplicates, safe_move, select_keeper
+from dedoopsie.core import scan_directory, find_duplicates, safe_move, select_keeper
 
 files = scan_directory("/some/dir")
 dupe_groups = find_duplicates(files)
@@ -124,11 +124,11 @@ From the repo root:
 
 ```bash
 pip install .
-dedupe --help
+dedoopsie --help
 ```
 
 Or without installing:
 
 ```bash
-python -m dedupe.cli /your/target/path
+python -m dedoopsie.cli /your/target/path
 ```

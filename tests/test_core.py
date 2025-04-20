@@ -2,7 +2,7 @@ import os
 import tempfile
 import csv
 from pathlib import Path
-from dedupe import core
+from dedoopsie import core
 
 
 def create_test_files(base_dir):

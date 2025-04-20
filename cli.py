@@ -3,7 +3,7 @@ import os
 import csv
 from pathlib import Path
 from datetime import datetime
-from dedupe.core import *
+from dedoopsie.core import *
 
 def main():
     parser = argparse.ArgumentParser()
