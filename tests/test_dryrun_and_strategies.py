@@ -1,9 +1,12 @@
+"""
+Tests specific keeper strategies, path collision resolution, and hash mismatch detection.
+"""
+
 import os
 import tempfile
 import csv
 from pathlib import Path
-from dedoopsie.dedoopsie import core
-
+from dedoopsie import core
 
 def create_test_group_with_metadata(base_dir):
     base = Path(base_dir)
@@ -17,7 +20,6 @@ def create_test_group_with_metadata(base_dir):
     os.utime(newest, None)  # now
     os.utime(longest, (1_500_000_000, 1_500_000_000))
 
-
 def test_keeper_strategies():
     with tempfile.TemporaryDirectory() as tmpdir:
         path = Path(tmpdir)
@@ -29,7 +31,6 @@ def test_keeper_strategies():
         assert core.select_keeper(group, "oldest").name == "oldest.txt"
         assert core.select_keeper(group, "newest").name == "newest.txt"
         assert core.select_keeper(group, "longest").name.startswith("this-is-a-very-long")
-
 
 def test_generate_safe_path_collision():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -45,7 +46,6 @@ def test_generate_safe_path_collision():
         assert safe.name.endswith(".txt")
         assert safe != basefile
 
-
 def test_hash_mismatch_detection():
     with tempfile.TemporaryDirectory() as src_tmp, tempfile.TemporaryDirectory() as dst_tmp:
         src = Path(src_tmp) / "test.txt"
@@ -59,3 +59,4 @@ def test_hash_mismatch_detection():
         original_hash = core.hash_file(src)
         moved_hash = core.hash_file(moved_path)
         assert original_hash != moved_hash
+

@@ -1,9 +1,10 @@
-import os
 import tempfile
-import csv
 from pathlib import Path
-from dedoopsie.dedoopsie import core
+from dedoopsie import core
 
+"""
+Test full deduplication and safe move behavior on controlled input files.
+"""
 
 def create_test_files(base_dir):
     base = Path(base_dir)
@@ -12,7 +13,6 @@ def create_test_files(base_dir):
     (base / "dupe2.txt").write_text("same content")
     (base / "dupe3.txt").write_text("same content")
     (base / "zero.txt").write_text("")
-
 
 def test_find_duplicates_and_safe_move():
     with tempfile.TemporaryDirectory() as src_tmp, tempfile.TemporaryDirectory() as dst_tmp:
@@ -33,3 +33,4 @@ def test_find_duplicates_and_safe_move():
                 result = core.safe_move(src, dst_path)
                 assert result[2]
                 assert (dst_path / result[1].name).exists()
+
