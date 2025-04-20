@@ -1,3 +1,9 @@
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+![License: BSD-2-Clause](https://img.shields.io/badge/license-BSD--2--Clause-blue)
+![Safe by Default](https://img.shields.io/badge/Safe-by_default-brightgreen)
+![No File Deletion](https://img.shields.io/badge/no_file_deletion-this_tool_moves_only-blue)
+
 # Dedupe Safe Move
 
 This is a cautious, test-backed utility for identifying and moving duplicate files within a directory tree. It favors safety, transparency, and auditability over blind automation.
@@ -101,10 +107,6 @@ BSD 2-Clause
 ---
 
 
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
-![License: MIT](https://img.shields.io/badge/license-MIT-blue)
-![No Deletion](https://img.shields.io/badge/deletes-nothing)
 
 
 ---
