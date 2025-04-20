@@ -27,14 +27,14 @@ def main():
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-    log_path = args.log if args.log else (
-        Path(f"dupes-{timestamp}.csv") if not args.wet else args.move_dir / f"dupes-{timestamp}.csv"
-)
-
     if not args.move_dir:
         default_dir = Path(f".dedoopsie_quarantine/{timestamp}")
         args.move_dir = default_dir
         print(f"[INFO] Using default move-dir: {args.move_dir}")
+
+    log_path = args.log if args.log else (
+        Path(f"dupes-{timestamp}.csv") if not args.wet else args.move_dir / f"dupes-{timestamp}.csv"
+    )
 
     if args.wet:
         if not args.yes_really or os.environ.get("DUDE_ARE_YOU_SURE") != "YES":
