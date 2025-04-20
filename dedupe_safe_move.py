@@ -152,7 +152,8 @@ def main():
         if not args.yes_really or os.environ.get("DUDE_ARE_YOU_SURE") != "YES":
             print("[ABORT] Wet mode requires --yes-really and DUDE_ARE_YOU_SURE=YES")
             return
-    args.move_dir.mkdir(parents=True, exist_ok=True)
+    if args.wet:
+        args.move_dir.mkdir(parents=True, exist_ok=True)
 
     print("[CONFIG]")
     print(f"- Mode: {'WET' if args.wet else 'DRYRUN'}")
@@ -168,7 +169,7 @@ def main():
     total_wasted = 0
     with open(log_path, "w", newline="") as logfile:
         writer = csv.writer(logfile)
-        writer.writerow(["GROUP_ID", "ACTION", "ORIGINAL_PATH", "DEST_PATH", "KEEPER_PATH", "GROUP_SIZE", "RECLAIMABLE", "ERROR"])
+        writer.writerow(["GROUP_ID", "ACTION", "ORIGINAL_PATH", "DEST_PATH", "KEEPER_PATH", "GROUP_SIZE", "RECLAIMABLE", "HASH", "ERROR"])
 
         for i, group in enumerate(dups, 1):
             keeper = select_keeper(group, args.keeper)
@@ -178,7 +179,8 @@ def main():
             print(f"[GROUP {i}] {len(group)} files, size each: {human_readable_size(group_size)}")
             print(f"  - Before: {human_readable_size(group_total)} | After: {human_readable_size(group_size)} | Reclaimable: {human_readable_size(reclaimable)}")
 
-            writer.writerow([i, "KEEPER", str(keeper), "", str(keeper), group_total, reclaimable, ""])
+            keeper_hash = hash_file(keeper)
+            writer.writerow([i, "KEEPER", str(keeper), "", str(keeper), group_total, reclaimable, keeper_hash, ""])
 
             for dupe in group:
                 if dupe == keeper:
@@ -187,12 +189,15 @@ def main():
                 if args.wet:
                     result = safe_move(dupe, args.move_dir, verify_hash=args.strict)
                     if result[2]:
-                        writer.writerow([i, "MOVED", str(dupe), str(result[1]), str(keeper), group_total, reclaimable, ""])
+                        dupe_hash = hash_file(dupe)
+                        writer.writerow([i, "MOVED", str(dupe), str(result[1]), str(keeper), group_total, reclaimable, dupe_hash, ""])
                     else:
-                        writer.writerow([i, "ERROR", str(dupe), str(result[1]), str(keeper), group_total, reclaimable, result[3]])
+                        dupe_hash = hash_file(dupe)
+                        writer.writerow([i, "ERROR", str(dupe), str(result[1]), str(keeper), group_total, reclaimable, dupe_hash, result[3]])
                 else:
                     dest = generate_safe_path(args.move_dir or Path("/dryrun"), dupe.name)
-                    writer.writerow([i, "DRYRUN", str(dupe), str(dest), str(keeper), group_total, reclaimable, ""])
+                    dupe_hash = hash_file(dupe)
+                    writer.writerow([i, "DRYRUN", str(dupe), str(dest), str(keeper), group_total, reclaimable, dupe_hash, ""])
 
     print(f"[DONE] {len(dups)} dupe groups processed. Total duplicate space: {human_readable_size(total_wasted)}. Log saved to {log_path}")
 
