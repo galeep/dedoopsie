@@ -1,15 +1,11 @@
-# dedupe_safe_move.py
-#
-# DESIGN RATIONALE:
-# This script safely identifies and relocates duplicate files within a given directory tree.
-# It prioritizes reliability, transparency, and reversibility over aggressive deletion.
-#
-# Key design decisions:
-# - Files are only deleted after a successful copy and optional hash verification.
-# - All actions are logged in a machine-parseable CSV file.
-# - Filename collisions are resolved with zero-padded suffixes.
-# - Unsafe operations (like actual deletion) require redundant confirmation flags and env vars.
-# - No shell commands or external tools are used; everything is pure Python.
+"""
+Core logic for the dedoopsie deduplication tool.
+
+This module provides reusable functions for identifying, hashing, grouping, 
+and safely relocating duplicate files within a directory tree.
+
+It is used by the CLI interface and can be imported independently for programmatic use.
+"""
 
 import os
 import hashlib
