@@ -5,11 +5,11 @@ import subprocess
 import csv
 import pytest
 
-# DESIGN RATIONALE:
-# These tests validate dryrun and wet modes of the dedupe script.
-# They use real file operations in isolated temp directories.
-# Logging is parsed to assert behavior without inspecting stdout.
-
+"""
+Tests for dryrun and wet modes of the dedoopsie CLI.
+Uses real file operations in isolated temp directories.
+Structured logs are parsed to validate behavior.
+"""
 
 def create_test_files(base_dir):
     """
@@ -25,10 +25,9 @@ def create_test_files(base_dir):
     (base / "dupe3.txt").write_text("same content")
     (base / "zero.txt").write_text("")
 
-
-def run_dedupe(dedupe_script, src_dir, move_dir, wet=False):
+def run_dedupe_cli(src_dir, move_dir, wet=False):
     """
-    Run the dedupe script via subprocess with appropriate flags.
+    Run dedoopsie CLI via subprocess with appropriate flags.
     Uses DUDE_ARE_YOU_SURE=YES to unlock wet mode.
     """
     env = os.environ.copy()
@@ -36,7 +35,7 @@ def run_dedupe(dedupe_script, src_dir, move_dir, wet=False):
 
     args = [
         "/opt/local/bin/python",
-        dedupe_script,
+        "-m", "dedoopsie.cli",
         str(src_dir),
         "--move-dir", str(move_dir),
         "--log", str(move_dir / "log.csv")
@@ -47,13 +46,11 @@ def run_dedupe(dedupe_script, src_dir, move_dir, wet=False):
 
     subprocess.run(args, check=True, env=env)
 
-
 def read_log(log_path):
-    """Parse CSV log output from dedoopsie.dedoopsie run."""
+    """Parse CSV log output from dedoopsie run."""
     with open(log_path) as f:
         reader = csv.DictReader(f)
         return list(reader)
-
 
 @pytest.fixture
 def temp_dirs():
@@ -64,7 +61,6 @@ def temp_dirs():
     with tempfile.TemporaryDirectory() as src_tmp, tempfile.TemporaryDirectory() as dst_tmp:
         yield Path(src_tmp), Path(dst_tmp)
 
-
 def test_deduper_dryrun(temp_dirs):
     """
     In dryrun mode:
@@ -73,10 +69,9 @@ def test_deduper_dryrun(temp_dirs):
     """
     src_path, dst_path = temp_dirs
     create_test_files(src_path)
-    run_dedupe("dedupe_safe_move.py", src_path, dst_path, wet=False)
+    run_dedupe_cli(src_path, dst_path, wet=False)
     log_entries = read_log(dst_path / "log.csv")
     assert all(row["ACTION"] == "DRYRUN" for row in log_entries)
-
 
 def test_deduper_wet(temp_dirs):
     """
@@ -87,7 +82,7 @@ def test_deduper_wet(temp_dirs):
     """
     src_path, dst_path = temp_dirs
     create_test_files(src_path)
-    run_dedupe("dedupe_safe_move.py", src_path, dst_path, wet=True)
+    run_dedupe_cli(src_path, dst_path, wet=True)
     log_entries = read_log(dst_path / "log.csv")
     moved = [row for row in log_entries if row["ACTION"] == "MOVED"]
     assert len(moved) == 2  # dupe2 and dupe3 should have moved
